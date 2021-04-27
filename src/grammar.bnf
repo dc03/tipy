@@ -1,0 +1,52 @@
+ALPHA           ::= "A-Za-z"
+DIGIT           ::= "0-9"
+UNDER           ::= "_"
+SPACE           ::= " "
+ESCAPE          ::= "\b"|"\f"|"\n"|"\r"|"\t"|"\""|"\'"|"\\"
+
+STRING          ::= "'" (ALPHA|DIGIT|UNDER|SPACE|ESCAPE)+ "'"
+NUMBER          ::= DIGIT+ ("." DIGIT+)?
+IDENTIFIER      ::= UNDER|ALPHA (UNDER|ALPHA|DIGIT)*
+
+expression      ::= logor
+logor           ::= logand         (("or"|"||") logand)*
+logand          ::= bitor          (("and"|"&&") bitor)*
+bitor           ::= bitxor         ("|" bitxor)*
+bitxor          ::= bitand         ("^" bitand)*
+bitand          ::= equality       ("&" equality)*
+equality        ::= comparison     (("!="|"==") comparison)*
+comparison      ::= bitshift       ((">"|">="|"<"|"<=") bitshift)*
+bitshift        ::= addition       (("<<"|">>") addition)*
+addtion         ::= multiplication ("+"|"-"|"%" multiplication)?
+multiplication  ::= unary          ("*"|"/" unary)?
+unary           ::= ("!"|"-"|"~") unary
+                  | call
+argument        ::= expression ("," expression)*
+call            ::= primary ("(" arguments? ")")*
+primary         ::= IDENTIFIER
+                  | NUMBER
+                  | STRING
+                  | "(" expression ")"
+
+blockstmt       ::= "{" declaration* "}"
+comment         ::= "#" .* EOL
+ifstmt          ::= "if" expression blockstmt ("else" (blockstmt|ifstmt))?
+returnstmt      ::= "return" expression ";"
+whilestmt       ::= "while" expression blockstmt
+
+statement       ::= expression ";"
+                  | blockstmt
+                  | coment
+                  | ifstmt
+                  | returnstmt
+                  | whilestmt
+
+vardecl         ::= "var" IDENTIFIER "=" expression ";"
+fundecl         ::= "fun" IDENTIFIER "(" parameters? ")" block
+parameters      ::= IDENTIFIER ("," IDENTIFIER)*
+
+declaration     ::= vardecl
+                  | fundecl
+                  | statement
+
+program         ::= declaration* EOF

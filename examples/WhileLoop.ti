@@ -1,0 +1,14 @@
+i = 0;
+
+fun f(x) {
+    print(x);
+}
+
+fun g(x, y) {
+    x(y);
+}
+
+while i < 5 {
+    g(f, i);
+    i = i + 1;
+}

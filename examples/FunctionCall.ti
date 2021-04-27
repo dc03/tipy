@@ -1,0 +1,16 @@
+fun f() {
+    i = 0;
+    # Closures work (I think)
+    fun g() {
+        i = i + 1;
+        print(i);
+    }
+    return g;
+}
+
+x = f();
+y = f();
+x();
+y();
+x();
+y();
